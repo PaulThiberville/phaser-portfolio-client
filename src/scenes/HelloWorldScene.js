@@ -23,19 +23,19 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.socket.on("connect", () => (this.player.id = this.socket.id));
 
     this.socket.on("initialPlayers", (data) => {
-      console.log("initialPlayers", data);
-      this.players = data;
+      //console.log("initialPlayers", data);
+      this.createOtherPlayers(data);
     });
 
     this.socket.on("playerJoin", (data) => {
-      console.log("New player:", data);
+      //console.log("New player:", data);
       this.addPlayer(data);
     });
     this.socket.on("playerLeave", (data) => {
       this.players = [...this.players].filter((player) => {
         return player.id !== data.id;
       });
-      console.log("Leaving player :", data);
+      //console.log("Leaving player :", data);
     });
     this.socket.on("disconnect", () => console.log("Disconected..."));
 
@@ -60,7 +60,6 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.createAnims();
     this.createPlayer();
-    this.createOtherPlayers();
     setInterval(() => {
       if (this.lastX !== this.player.x || this.lastY !== this.player.y) {
         this.lastX = this.player.x;
@@ -83,9 +82,9 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.player.setVelocity(0);
   }
 
-  createOtherPlayers() {
-    console.log("createOtherPlayers:", this.players);
-    const otherPlayers = [...this.players];
+  createOtherPlayers(data) {
+    //console.log("createOtherPlayers:", this.players);
+    const otherPlayers = [...data];
     this.players = [];
     otherPlayers.forEach((player) => {
       this.addPlayer(player);
@@ -93,7 +92,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   addPlayer(newPlayer) {
-    console.log("adding Player :", newPlayer);
+    //console.log("adding Player :", newPlayer);
     const newSprite = this.physics.add
       .sprite(newPlayer.position.x, newPlayer.position.y, "Char1")
       .setScale(2);
@@ -168,7 +167,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   updateOtherPlayer(otherPlayer) {
     //console.log("updateOtherPlayer :", otherPlayer);
     this.players.forEach((player) => {
-      if (player.id === otherPlayer.id) {
+      if (player.id === otherPlayer.id && player.sprite) {
         player.sprite.x = otherPlayer.position.x;
         player.sprite.y = otherPlayer.position.y;
         player.sprite.flipX = otherPlayer.flipX;
