@@ -8,10 +8,9 @@ function App() {
   const [right, setRight] = useState(false);
   const [up, setUp] = useState(false);
   const [down, setDown] = useState(false);
-  const scene = phaserGame.scene.keys.helloworld;
 
   useEffect(() => {
-    scene.setVelocityXY(left, right, up, down);
+    phaserGame.scene.keys.helloworld.setVelocityXY(left, right, up, down);
   }, [left, right, up, down]);
 
   document.addEventListener("contextmenu", (event) => event.preventDefault());
