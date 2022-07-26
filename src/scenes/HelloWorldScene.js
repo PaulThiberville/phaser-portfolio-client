@@ -4,12 +4,13 @@ import { io } from "socket.io-client";
 export default class HelloWorldScene extends Phaser.Scene {
   constructor() {
     super("helloworld");
+    this.spriteNumber = 0;
     this.player = {};
     this.players = [];
     this.spawnPosition = { x: 160, y: 160 };
     this.cursors = {};
     this.speed = 100;
-    this.currentAnimation = "idle";
+    this.currentAnimation = "";
     this.velocityX = 0;
     this.velocityY = 0;
     this.lastX = 160;
@@ -20,16 +21,24 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   connexion() {
     this.socket = io("https://phaser-portfolio-server.herokuapp.com/");
+    //this.socket = io("http://localhost:5000");
 
-    this.socket.on("connect", () => (this.player.id = this.socket.id));
+    this.socket.on("connect", () => {
+      console.log("socket.id :", this.socket.id);
+      this.player.id = this.socket.id;
+      this.socket.emit("setupPlayer", {
+        position: { x: 160, y: 160 },
+        anim: this.currentAnimation,
+      });
+    });
 
     this.socket.on("initialPlayers", (data) => {
-      //console.log("initialPlayers", data);
+      console.log("initialPlayers", data);
       this.createOtherPlayers(data);
     });
 
     this.socket.on("playerJoin", (data) => {
-      //console.log("New player:", data);
+      console.log("New player:", data);
       this.addPlayer(data);
     });
     this.socket.on("playerLeave", (data) => {
@@ -56,17 +65,25 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   preload() {
     //Sprites from : https://0x72.itch.io/pixeldudesmaker
-    this.load.spritesheet("Char1", "assets/spritesheets/Char1.png", {
-      frameWidth: 16,
-      frameHeight: 24,
-    });
-    this.connexion();
-
+    for (let i = 1; i <= 13; i++) {
+      this.load.spritesheet(
+        "Char" + i,
+        "assets/spritesheets/Char" + i + ".png",
+        {
+          frameWidth: 16,
+          frameHeight: 24,
+        }
+      );
+    }
+    this.spriteNumber = Math.floor(1 + Math.random() * 12);
+    console.log("spriteNumber", this.spriteNumber);
+    this.currentAnimation = "idle" + this.spriteNumber;
     //planks image from : https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e762a106081c497.png
     this.load.image("planks", "assets/images/background_floor.png");
   }
 
   create() {
+    this.connexion();
     this.planks = this.add.tileSprite(0, 0, 640, 640, "planks");
     this.cursors = this.input.keyboard.createCursorKeys();
     this.createAnims();
@@ -87,7 +104,11 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   createPlayer() {
     this.player = this.physics.add
-      .sprite(this.spawnPosition.x, this.spawnPosition.y, "Char1")
+      .sprite(
+        this.spawnPosition.x,
+        this.spawnPosition.y,
+        "Char" + this.spriteNumber
+      )
       .setScale(2);
     this.player.setCollideWorldBounds(true);
     this.player.setVelocity(0);
@@ -103,45 +124,51 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   addPlayer(newPlayer) {
-    //console.log("adding Player :", newPlayer);
+    console.log("adding Player :", newPlayer);
     const newSprite = this.physics.add
-      .sprite(newPlayer.position.x, newPlayer.position.y, "Char1")
+      .sprite(
+        newPlayer.position.x,
+        newPlayer.position.y,
+        "Char" + newPlayer.spriteNumber
+      )
       .setScale(2);
     newPlayer.sprite = newSprite;
     this.players.push(newPlayer);
   }
 
   createAnims() {
-    this.anims.create({
-      key: "run",
-      frames: this.anims.generateFrameNumbers("Char1", {
-        frames: [8, 9, 10, 11],
-      }),
-      frameRate: 7,
-    });
+    for (let i = 0; i < 13; i++) {
+      this.anims.create({
+        key: "run" + (i + 1),
+        frames: this.anims.generateFrameNumbers("Char" + (i + 1), {
+          frames: [8, 9, 10, 11],
+        }),
+        frameRate: 7,
+      });
 
-    this.anims.create({
-      key: "idle",
-      frames: this.anims.generateFrameNumbers("Char1", {
-        frames: [4, 5, 6, 7],
-      }),
-      frameRate: 7,
-    });
+      this.anims.create({
+        key: "idle" + (i + 1),
+        frames: this.anims.generateFrameNumbers("Char" + (i + 1), {
+          frames: [4, 5, 6, 7],
+        }),
+        frameRate: 7,
+      });
+    }
   }
 
   setAnimations() {
-    //Apply animatio
+    //Apply animation
     if (this.velocityY !== 0 || this.velocityX !== 0) {
-      this.currentAnimation = "run";
+      this.currentAnimation = "run" + this.spriteNumber;
     } else {
-      this.currentAnimation = "idle";
+      this.currentAnimation = "idle" + this.spriteNumber;
     }
 
-    if (this.currentAnimation === "idle") {
-      this.player.playAfterRepeat({ key: "idle" });
+    if (this.currentAnimation === "idle" + this.spriteNumber) {
+      this.player.playAfterRepeat({ key: "idle" + this.spriteNumber });
     }
-    if (this.currentAnimation === "run") {
-      this.player.playAfterRepeat({ key: "run" });
+    if (this.currentAnimation === "run" + this.spriteNumber) {
+      this.player.playAfterRepeat({ key: "run" + this.spriteNumber });
     }
 
     //otherPlayers Anims
