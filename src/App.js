@@ -14,7 +14,16 @@ function App() {
     scene.setVelocityXY(left, right, up, down);
   }, [left, right, up, down]);
 
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
+
   document.querySelector("html").addEventListener("mouseup", () => {
+    setLeft(false);
+    setRight(false);
+    setUp(false);
+    setDown(false);
+  });
+
+  document.querySelector("html").addEventListener("touchend", () => {
     setLeft(false);
     setRight(false);
     setUp(false);
@@ -23,12 +32,29 @@ function App() {
 
   return (
     <div className="arrows">
-      <button onMouseDown={() => setUp(true)}>Up</button>
+      <button onMouseDown={() => setUp(true)} onTouchStart={() => setUp(true)}>
+        Up
+      </button>
       <div className="horizontal-arrows">
-        <button onMouseDown={() => setLeft(true)}>Left</button>
-        <button onMouseDown={() => setRight(true)}>Right</button>
+        <button
+          onMouseDown={() => setLeft(true)}
+          onTouchStart={() => setLeft(true)}
+        >
+          Left
+        </button>
+        <button
+          onMouseDown={() => setRight(true)}
+          onTouchStart={() => setRight(true)}
+        >
+          Right
+        </button>
       </div>
-      <button onMouseDown={() => setDown(true)}>Down</button>
+      <button
+        onMouseDown={() => setDown(true)}
+        onTouchStart={() => setDown(true)}
+      >
+        Down
+      </button>
     </div>
   );
 }
