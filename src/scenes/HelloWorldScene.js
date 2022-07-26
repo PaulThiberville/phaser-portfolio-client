@@ -32,13 +32,14 @@ export default class HelloWorldScene extends Phaser.Scene {
       this.addPlayer(data);
     });
     this.socket.on("playerLeave", (data) => {
+      //console.log("playerLeave :", data);
       this.players.forEach((player) => {
-        if (player.id === data.id && player.sprite) {
-          player.sprite.delete();
+        if (player.id === data && player.sprite) {
+          player.sprite.destroy();
         }
       });
       this.players = [...this.players].filter((player) => {
-        return player.id !== data.id;
+        return player.id !== data;
       });
       //console.log("Leaving player :", data);
     });
