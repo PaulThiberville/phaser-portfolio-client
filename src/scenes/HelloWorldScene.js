@@ -98,7 +98,6 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   update() {
-    this.setVelocityXY();
     this.setAnimations();
   }
 
@@ -179,27 +178,32 @@ export default class HelloWorldScene extends Phaser.Scene {
     });
   }
 
-  setVelocityXY() {
-    if (this.cursors.left.isDown) {
-      this.velocityX = -this.speed;
-      if (this.player.flipX === false) this.player.flipX = true;
-    } else if (this.cursors.right.isDown) {
-      this.velocityX = this.speed;
-      if (this.player.flipX === true) this.player.flipX = false;
-    } else {
-      this.velocityX = 0;
-    }
+  setVelocityXY(left, right, up, down) {
+    if (this.player?.x) {
+      console.log(left, right, up, down);
 
-    if (this.cursors.up.isDown) {
-      this.velocityY = -this.speed;
-    } else if (this.cursors.down.isDown) {
-      this.velocityY = this.speed;
-    } else {
-      this.velocityY = 0;
-    }
+      if (left === true) {
+        this.velocityX = -this.speed;
+      } else if (right === true) {
+        this.velocityX = this.speed;
+      } else {
+        this.velocityX = 0;
+      }
 
-    this.player.setVelocityX(this.velocityX);
-    this.player.setVelocityY(this.velocityY);
+      if (up === true) {
+        this.velocityY = -this.speed;
+      } else if (down === true) {
+        this.velocityY = this.speed;
+      } else {
+        this.velocityY = 0;
+      }
+
+      console.log("Velocity X", this.velocityX);
+      console.log("Velocity Y", this.velocityY);
+
+      this.player.setVelocityX(this.velocityX);
+      this.player.setVelocityY(this.velocityY);
+    }
   }
 
   updateOtherPlayer(otherPlayer) {

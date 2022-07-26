@@ -12,6 +12,28 @@ html {
   text-align: center;
 }
 
+.arrows {
+  margin-top: 50px;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0, auto;
+}
+
+.arrows button {
+  height: 50px;
+  width: 50px;
+}
+
+.horizontal-arrows {
+  width: 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
