@@ -4,13 +4,8 @@ import HelloWorldScene from "./scenes/HelloWorldScene";
 
 const config = {
   type: Phaser.AUTO,
-  parent: "phaser-container",
-  backgroundColor: "#282c34",
-  scale: {
-    mode: Phaser.Scale.ScaleModes.RESIZE,
-    width: window.innerWidth,
-    height: window.innerHeight,
-  },
+  width: 320,
+  height: 320,
   physics: {
     default: "arcade",
     arcade: {

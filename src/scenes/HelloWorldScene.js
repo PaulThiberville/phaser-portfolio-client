@@ -6,15 +6,16 @@ export default class HelloWorldScene extends Phaser.Scene {
     super("helloworld");
     this.player = {};
     this.players = [];
-    this.spawnPosition = { x: 200, y: 300 };
+    this.spawnPosition = { x: 160, y: 160 };
     this.cursors = {};
     this.speed = 100;
     this.currentAnimation = "idle";
     this.velocityX = 0;
     this.velocityY = 0;
-    this.lastX = 200;
-    this.lastY = 300;
+    this.lastX = 160;
+    this.lastY = 160;
     this.socket = {};
+    this.planks = {};
   }
 
   connexion() {
@@ -60,9 +61,13 @@ export default class HelloWorldScene extends Phaser.Scene {
       frameHeight: 24,
     });
     this.connexion();
+
+    //planks image from : https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e762a106081c497.png
+    this.load.image("planks", "assets/images/background_floor.png");
   }
 
   create() {
+    this.planks = this.add.tileSprite(0, 0, 640, 640, "planks");
     this.cursors = this.input.keyboard.createCursorKeys();
     this.createAnims();
     this.createPlayer();
