@@ -15,6 +15,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.velocityY = 0;
     this.lastX = 160;
     this.lastY = 160;
+    this.lastAnim = "";
     this.socket = {};
     this.planks = {};
   }
@@ -24,7 +25,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     //this.socket = io("http://localhost:5000");
 
     this.socket.on("connect", () => {
-      console.log("socket.id :", this.socket.id);
+      //console.log("socket.id :", this.socket.id);
       this.player.id = this.socket.id;
       this.socket.emit("setupPlayer", {
         position: { x: 160, y: 160 },
@@ -33,12 +34,12 @@ export default class HelloWorldScene extends Phaser.Scene {
     });
 
     this.socket.on("initialPlayers", (data) => {
-      console.log("initialPlayers", data);
+      //console.log("initialPlayers", data);
       this.createOtherPlayers(data);
     });
 
     this.socket.on("playerJoin", (data) => {
-      console.log("New player:", data);
+      //console.log("New player:", data);
       this.addPlayer(data);
     });
     this.socket.on("playerLeave", (data) => {
@@ -76,8 +77,9 @@ export default class HelloWorldScene extends Phaser.Scene {
       );
     }
     this.spriteNumber = Math.floor(1 + Math.random() * 12);
-    console.log("spriteNumber", this.spriteNumber);
+    //console.log("spriteNumber", this.spriteNumber);
     this.currentAnimation = "idle" + this.spriteNumber;
+    this.lastAnim = "idle" + this.spriteNumber;
     //planks image from : https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e762a106081c497.png
     this.load.image("planks", "assets/images/background_floor.png");
   }
@@ -89,9 +91,14 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.createAnims();
     this.createPlayer();
     setInterval(() => {
-      if (this.lastX !== this.player.x || this.lastY !== this.player.y) {
+      if (
+        this.lastX !== this.player.x ||
+        this.lastY !== this.player.y ||
+        this.lastAnim !== this.currentAnimation
+      ) {
         this.lastX = this.player.x;
         this.lastY = this.player.y;
+        this.lastAnim = this.currentAnimation;
         this.sendUpdate();
       }
     }, 60);
@@ -123,7 +130,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   addPlayer(newPlayer) {
-    console.log("adding Player :", newPlayer);
+    //console.log("adding Player :", newPlayer);
     const newSprite = this.physics.add
       .sprite(
         newPlayer.position.x,
@@ -180,7 +187,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   setVelocityXY(left, right, up, down) {
     if (this.player?.x) {
-      console.log(left, right, up, down);
+      //console.log(left, right, up, down);
 
       if (left === true) {
         this.velocityX = -this.speed;
@@ -200,8 +207,8 @@ export default class HelloWorldScene extends Phaser.Scene {
         this.velocityY = 0;
       }
 
-      console.log("Velocity X", this.velocityX);
-      console.log("Velocity Y", this.velocityY);
+      //console.log("Velocity X", this.velocityX);
+      //console.log("Velocity Y", this.velocityY);
 
       this.player.setVelocityX(this.velocityX);
       this.player.setVelocityY(this.velocityY);
@@ -209,7 +216,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   updateOtherPlayer(otherPlayer) {
-    console.log("updateOtherPlayer :", otherPlayer);
+    //console.log("updateOtherPlayer :", otherPlayer);
     this.players.forEach((player) => {
       if (player.id === otherPlayer.id && player.sprite) {
         player.sprite.x = otherPlayer.position.x;
