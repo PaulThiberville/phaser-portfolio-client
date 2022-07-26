@@ -18,7 +18,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   connexion() {
-    this.socket = io("http://localhost:5000");
+    this.socket = io("https://phaser-portfolio-server.herokuapp.com/");
 
     this.socket.on("connect", () => (this.player.id = this.socket.id));
 
