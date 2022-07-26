@@ -184,8 +184,10 @@ export default class HelloWorldScene extends Phaser.Scene {
 
       if (left === true) {
         this.velocityX = -this.speed;
+        this.player.flipX = true;
       } else if (right === true) {
         this.velocityX = this.speed;
+        this.player.flipX = false;
       } else {
         this.velocityX = 0;
       }
@@ -207,7 +209,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   updateOtherPlayer(otherPlayer) {
-    //console.log("updateOtherPlayer :", otherPlayer);
+    console.log("updateOtherPlayer :", otherPlayer);
     this.players.forEach((player) => {
       if (player.id === otherPlayer.id && player.sprite) {
         player.sprite.x = otherPlayer.position.x;
