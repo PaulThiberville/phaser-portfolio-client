@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import phaserGame from "./PhaserGame";
 
@@ -8,6 +7,7 @@ function App() {
   const [right, setRight] = useState(false);
   const [up, setUp] = useState(false);
   const [down, setDown] = useState(false);
+  const [text, setText] = useState("");
 
   useEffect(() => {
     phaserGame.scene.keys.helloworld.setVelocityXY(left, right, up, down);
@@ -29,8 +29,26 @@ function App() {
     setDown(false);
   });
 
+  const handleSendMessage = () => {
+    if (text === "") return;
+    phaserGame.scene.keys.helloworld.sendMessage(text);
+    setText("");
+  };
+
   return (
     <div className="App">
+      <div className="chat">
+        <input
+          type="text"
+          maxLength={25}
+          onChange={(e) => setText(e.target.value)}
+          value={text}
+          className="round-left"
+        ></input>
+        <button className="round-right" onClick={() => handleSendMessage()}>
+          <i className="fa fa-paper-plane" aria-hidden="true"></i>
+        </button>
+      </div>
       <div className="gamePad">
         <div className="arrows">
           <button

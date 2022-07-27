@@ -8,7 +8,6 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.player = {};
     this.players = [];
     this.spawnPosition = { x: 160, y: 160 };
-    this.cursors = {};
     this.speed = 100;
     this.currentAnimation = "";
     this.velocityX = 0;
@@ -18,6 +17,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.lastAnim = "";
     this.socket = {};
     this.planks = {};
+    this.messages = [];
   }
 
   connexion() {
@@ -62,6 +62,10 @@ export default class HelloWorldScene extends Phaser.Scene {
         this.updateOtherPlayer(data);
       }
     });
+
+    this.socket.on("newMessage", (data) => {
+      this.addMessage(data.userName, data.text);
+    });
   }
 
   preload() {
@@ -87,7 +91,6 @@ export default class HelloWorldScene extends Phaser.Scene {
   create() {
     this.connexion();
     this.planks = this.add.tileSprite(0, 0, 640, 640, "planks");
-    this.cursors = this.input.keyboard.createCursorKeys();
     this.createAnims();
     this.createPlayer();
     setInterval(() => {
@@ -106,6 +109,29 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   update() {
     this.setAnimations();
+  }
+
+  sendMessage(text) {
+    this.socket.emit("newMessage", {
+      userName: this.socket.id.slice(0, 8),
+      text,
+    });
+  }
+
+  addMessage(userName, text) {
+    //Move all message up
+    this.messages.forEach((message) => (message.y += -20));
+
+    //
+    const newMessage = this.add.text(5, 300, userName + ": " + text, {
+      fontFamily: "monospace",
+    });
+    this.messages.push(newMessage);
+
+    //CLer first message if more than 3
+    if (this.messages.length > 3) {
+      this.messages.shift();
+    }
   }
 
   createPlayer() {
