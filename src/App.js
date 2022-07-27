@@ -30,30 +30,42 @@ function App() {
   });
 
   return (
-    <div className="arrows">
-      <button onMouseDown={() => setUp(true)} onTouchStart={() => setUp(true)}>
-        Up
-      </button>
-      <div className="horizontal-arrows">
-        <button
-          onMouseDown={() => setLeft(true)}
-          onTouchStart={() => setLeft(true)}
-        >
-          Left
-        </button>
-        <button
-          onMouseDown={() => setRight(true)}
-          onTouchStart={() => setRight(true)}
-        >
-          Right
-        </button>
+    <div className="App">
+      <div className="gamePad">
+        <div className="arrows">
+          <button
+            className="verticalButton round-up"
+            onMouseDown={() => setUp(true)}
+            onTouchStart={() => setUp(true)}
+          >
+            <i className="fa fa-caret-up"></i>
+          </button>
+          <div className="horizontal-arrows">
+            <button
+              className="horizontalButton round-left"
+              onMouseDown={() => setLeft(true)}
+              onTouchStart={() => setLeft(true)}
+            >
+              <i className="fa fa-caret-left"></i>
+            </button>
+            <button
+              className="horizontalButton round-right"
+              onMouseDown={() => setRight(true)}
+              onTouchStart={() => setRight(true)}
+            >
+              <i className="fa fa-caret-right"></i>
+            </button>
+          </div>
+          <button
+            className="verticalButton round-down"
+            onMouseDown={() => setDown(true)}
+            onTouchStart={() => setDown(true)}
+          >
+            <i className="fa fa-caret-down"></i>
+          </button>
+        </div>
+        <button className="roundButton">A</button>
       </div>
-      <button
-        onMouseDown={() => setDown(true)}
-        onTouchStart={() => setDown(true)}
-      >
-        Down
-      </button>
     </div>
   );
 }
