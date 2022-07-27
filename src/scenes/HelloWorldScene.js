@@ -18,6 +18,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.socket = {};
     this.planks = {};
     this.messages = [];
+    this.userName = "";
   }
 
   connexion() {
@@ -27,6 +28,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.socket.on("connect", () => {
       //console.log("socket.id :", this.socket.id);
       this.player.id = this.socket.id;
+      this.userName = this.socket.id.slice(0, 5);
       this.socket.emit("setupPlayer", {
         position: { x: 160, y: 160 },
         anim: this.currentAnimation,
@@ -113,9 +115,13 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   sendMessage(text) {
     this.socket.emit("newMessage", {
-      userName: this.socket.id.slice(0, 8),
+      userName: this.userName,
       text,
     });
+  }
+
+  changeUserName(newUserName) {
+    this.userName = newUserName;
   }
 
   addMessage(userName, text) {
@@ -128,8 +134,10 @@ export default class HelloWorldScene extends Phaser.Scene {
     });
     this.messages.push(newMessage);
 
-    //CLer first message if more than 3
-    if (this.messages.length > 3) {
+    //Clear first message if more than 4
+    if (this.messages.length > 4) {
+      const oldestMessage = this.messages[0];
+      oldestMessage.destroy();
       this.messages.shift();
     }
   }

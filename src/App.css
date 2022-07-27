@@ -20,19 +20,25 @@ canvas {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background-color: rgb(100, 64, 133);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+    rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+    rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+    rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
 }
 
 .chat {
   padding-top: 10px;
-  background-color: rgb(85, 55, 114);
   width: 100%;
   flex-grow: 1;
-  border-left: solid 10px rgb(85, 55, 114);
-  border-right: solid 10px rgb(85, 55, 114);
   z-index: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0 10px;
 }
 
 .chat input {
@@ -148,6 +154,20 @@ i {
   height: 35px;
   width: 35px;
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aButton {
+  margin-bottom: 50px;
+}
+.userButton {
+  margin-top: 50px;
+}
+
+.userButton i {
+  font-size: 16px;
 }
 
 .horizontal-arrows {
@@ -157,37 +177,50 @@ i {
   justify-content: space-between;
   align-items: center;
 }
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.profile {
+  padding: 0 10px;
+  height: 200px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile p {
+  color: white;
+  font-weight: bold;
+}
+
+.profile input {
+  width: 200px;
+  border-radius: 15px;
+  background-color: rgb(40, 40, 40);
+  color: white;
+  border-bottom: 4px solid rgb(132, 85, 176);
+  height: 30px;
+}
+
+.profile input:focus {
+  outline: none;
+}
+
+.profile-buttons {
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+}
+
+.profile-buttons button {
+  padding: 5px;
+  height: 30px;
+  width: 30px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.profile-buttons button i {
+  font-size: 15px;
 }
